@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from lab2 import Cube, Line
+from lab2_1st_part import Cube, Line
 
 
 
@@ -56,7 +56,7 @@ matrix_move_to_center = np.array([[ 1, 0, 0, -a],
 line_moved_to_center = np.dot(line_original, matrix_move_to_center.T)
 cube_moved_to_center = np.dot(cube_vertices_with_ones, matrix_move_to_center.T)
 
-# Rotate to ZOY
+# Rotate to XOZ
 matrix_ZOY = np.array([[ 1, 0, 0, 0,],
                     [ 0, cos_psi, -sin_psi, 0],
                     [ 0, sin_psi, cos_psi, 0],
@@ -78,7 +78,7 @@ line_rotate_to_Z = np.dot(line_moved_ZOY, matrix_Z.T)
 cube_rotate_to_Z = np.dot(cube_moved_ZOY, matrix_Z.T)
 
 # Rotate on given angle
-phi = np.pi/2
+phi = np.pi
 cos_phi = np.cos(phi)
 sin_phi = np.sin(phi)
 matrix_phi = np.array([[ cos_phi, -sin_phi, 0, 0,],
@@ -93,7 +93,7 @@ matrix_Z_rev = matrix_Z.T
 line_rotate_from_Z = np.dot(line_rotate_phi, matrix_Z_rev.T)
 cube_rotate_from_Z = np.dot(cube_rotate_phi, matrix_Z_rev.T)
 
-# Rotate from ZOY
+# Rotate from XOZ
 matrix_ZOY_rev = matrix_ZOY.T
 line_moved_from_ZOY = np.dot(line_rotate_from_Z, matrix_ZOY_rev.T)
 cube_moved_from_ZOY = np.dot(cube_rotate_from_Z, matrix_ZOY_rev.T)
@@ -170,7 +170,7 @@ cube_original.plot(ax)
 
 # cube_ZOY.plot(ax)
 
-# cube_Z.plot(ax,)
+# cube_Z.plot(ax)
 
 # cube_phi.plot(ax)
 

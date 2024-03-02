@@ -6,7 +6,7 @@ class Cube:
     def __init__(self, vertices):
         self.vertices = vertices
 
-    def plot(self, ax):
+    def plot(self, ax, color = 'r'):
         # З'єднуємо вершини для створення граней куба
         edges = np.array([
             [self.vertices[0,:-1], self.vertices[1,:-1], self.vertices[2,:-1], self.vertices[3,:-1]],
@@ -24,7 +24,7 @@ class Cube:
 
         # Відображення кожної грани окремо
         for i in range(len(edges)):
-            ax.add_collection3d(Poly3DCollection([edges[i]], facecolors='cyan', linewidths=1, edgecolors='r', alpha=0))
+            ax.add_collection3d(Poly3DCollection([edges[i]], facecolors='cyan', linewidths=1, edgecolors=color, alpha=0))
 
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
@@ -40,15 +40,16 @@ class Line:
         self.points = points
     def plot(self, ax, label, color):
         ax.plot(self.points[:, 0], self.points[:, 1], self.points[:, 2], label=label, color = color)
-        # Це треба видалити
+        # Відображення осей координат
         ax.quiver(-8, 0, 0, 16, 0, 0, color='k', label='X-axis')
         ax.quiver(0, -8, 0, 0, 16, 0, color='k', label='Y-axis')
         ax.quiver(0, 0, -8, 0, 0, 16, color='k', label='Z-axis')
-
+        
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
 
+        # Задаємо діапазон значень та позначки на вісях
         ax.set_xlim([-8, 8])
         ax.set_ylim([-8, 8])
         ax.set_zlim([-8, 8])
@@ -73,10 +74,25 @@ if __name__ == "__main__":
     # відносно початку координат, відносно однієї з координатних площин у
     # тривимірній декартовій системі координат (простір).
 
-    matrix_increment = np.array([[1.5,   0,   0, 0],
-                                [  0, 1.5,   0, 0],
-                                [  0,   0, 1.5, 0],
-                                [  0,   0,   0, 1]])
+    center_x = np.mean(cube_vertices[:, 0])
+    center_y = np.mean(cube_vertices[:, 1])
+    center_z = np.mean(cube_vertices[:, 2])
+
+    matrix_move_to_center = np.array([[1, 0, 0, -center_x],
+                                [0, 1, 0, -center_y],
+                                [0, 0, 1, -center_z],
+                                [0, 0, 0, 1]])
+    
+    matrix_move_from_center = np.array([[1, 0, 0, center_x],
+                                [0, 1, 0, center_y],
+                                [0, 0, 1, center_z],
+                                [0, 0, 0, 1]])
+    
+    matrix_increment = np.array([[1.5, 0, 0, 0],
+                                [0, 1.5, 0, 0],
+                                [0, 0, 1.5, 0],
+                                [0, 0, 0, 1]])
+    
     matrix_decrease = np.array([[0.5,   0,   0, 0],
                                 [  0, 0.5,   0, 0],
                                 [  0,   0, 0.5, 0],
@@ -89,27 +105,36 @@ if __name__ == "__main__":
                                         [  0, -1,  0, 0],
                                         [  0,  0, 1, 0],
                                         [  0,  0,  0, 1]])
-
-    cube_increment = np.dot(cube_vertices_with_ones, matrix_increment.T)
-    cube_decrease = np.dot(cube_vertices_with_ones, matrix_decrease.T)
+    # Куб переміщений до центру
+    cube_to_center = np.dot(cube_vertices_with_ones, matrix_move_to_center.T)
+    # Куб збільшений в центрі
+    cube_increment = np.dot(cube_to_center, matrix_increment.T)
+    # Збільшений куб переміщений від центру
+    cube_from_center_increment = np.dot(cube_increment, matrix_move_from_center.T)
+    # Куб зменшений в центрі
+    cube_decrease = np.dot(cube_to_center, matrix_decrease.T)
+    # Зменшений куб переміщений від центру
+    cube_from_center_decrease = np.dot(cube_decrease, matrix_move_from_center.T)
+    # Куб симетричний до центру координат
     cube_sym_start_coord = np.dot(cube_vertices_with_ones, matrix_sym_start_coord.T)
+    # Куб симетричний відносно однієї з координатних площин
     cube_sym_one_coord_plane = np.dot(cube_vertices_with_ones, matrix_sym_one_coord_plane.T)
 
     # Створюємо об'єкти кубів
-    my_cube = Cube(cube_vertices_with_ones)
-    cube_scalled_1 = Cube(cube_increment)
-    cube_scalled_2 = Cube(cube_decrease)
+    cube_original = Cube(cube_vertices_with_ones)
+    cube_scaled_up = Cube(cube_from_center_increment)
+    cube_scaled_down = Cube(cube_from_center_decrease)
     cube_sym_1 = Cube(cube_sym_start_coord)
     cube_sym_2 = Cube(cube_sym_one_coord_plane)
 
     # Виводимо куби на одному графіку
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    my_cube.plot(ax)
-    cube_scalled_1.plot(ax)
-    cube_scalled_2.plot(ax)
-    cube_sym_1.plot(ax)
-    cube_sym_2.plot(ax)
+    cube_original.plot(ax, color='green')
+    cube_scaled_up.plot(ax, 'red')
+    cube_scaled_down.plot(ax, 'yellow')
+    cube_sym_1.plot(ax, 'purple')
+    cube_sym_2.plot(ax, 'orange')
 
     plt.show()
 

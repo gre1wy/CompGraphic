@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from lab2 import Cube, Line
+from lab2_1st_part import Cube, Line
 
 # Три точки на площині прямокутника
 point1 = np.array([1, 2, 3])
@@ -82,6 +82,7 @@ cube_moved_4 = np.dot(cube_moved_3, M4.T)
 cube_moved_5 = np.dot(cube_moved_4, M5.T)
 cube_moved_6 = np.dot(cube_moved_5, M6.T)
 cube_moved_7 = np.dot(cube_moved_6, M7.T)
+print(cube_moved_7)
 
 # Куби
 cube = Cube(cube_vertices_with_ones)
@@ -93,8 +94,10 @@ cube_5 = Cube(cube_moved_5)
 cube_6 = Cube(cube_moved_6)
 cube_7 = Cube(cube_moved_7)
 
-# Зображення кубів
+# Зображення оригінального куба
 cube.plot(ax)
+
+# Зображення фінального куба
 cube_7.plot(ax)
 
 # Визначення вершин прямокутника

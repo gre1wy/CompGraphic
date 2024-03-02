@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from lab2 import Cube, Line
+from lab2_1st_part import Cube, Line
 
 # Три точки на площині прямокутника
 point1 = np.array([1, 2, 3])
