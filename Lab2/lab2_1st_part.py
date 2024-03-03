@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
+
 
 class Cube:
     def __init__(self, vertices):
         self.vertices = vertices
 
-    def plot(self, ax, color = 'r'):
+    def plot(self, ax, color = 'r', label = 'cube'):
         # З'єднуємо вершини для створення граней куба
         edges = np.array([
             [self.vertices[0,:-1], self.vertices[1,:-1], self.vertices[2,:-1], self.vertices[3,:-1]],
@@ -18,13 +19,15 @@ class Cube:
         ])
 
         # Відображення осей координат
-        ax.quiver(-8, 0, 0, 16, 0, 0, color='k', label='X-axis')
-        ax.quiver(0, -8, 0, 0, 16, 0, color='k', label='Y-axis')
-        ax.quiver(0, 0, -8, 0, 0, 16, color='k', label='Z-axis')
+        ax.quiver(-8, 0, 0, 16, 0, 0, color='k', label='_X-axis')
+        ax.quiver(0, -8, 0, 0, 16, 0, color='k', label='_Y-axis')
+        ax.quiver(0, 0, -8, 0, 0, 16, color='k', label='_Z-axis')
 
-        # Відображення кожної грани окремо
-        for i in range(len(edges)):
-            ax.add_collection3d(Poly3DCollection([edges[i]], facecolors='cyan', linewidths=1, edgecolors=color, alpha=0))
+        # Відображення
+        poly3d = Poly3DCollection(edges, facecolors='cyan', linewidths=1, edgecolors=color, alpha=0)
+        ax.add_collection3d(poly3d)
+
+        ax.add_collection3d(Line3DCollection([], colors=color, linewidths=1, label=label))
 
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
@@ -35,15 +38,19 @@ class Cube:
         ax.set_ylim([-8, 8])
         ax.set_zlim([-8, 8])
 
+        ax.legend(loc='upper right')
+
 class Line:
     def __init__(self, points):
         self.points = points
+
     def plot(self, ax, label, color):
-        ax.plot(self.points[:, 0], self.points[:, 1], self.points[:, 2], label=label, color = color)
+        ax.plot(self.points[:, 0], self.points[:, 1], self.points[:, 2], label = '_'+label, color = color)
+
         # Відображення осей координат
-        ax.quiver(-8, 0, 0, 16, 0, 0, color='k', label='X-axis')
-        ax.quiver(0, -8, 0, 0, 16, 0, color='k', label='Y-axis')
-        ax.quiver(0, 0, -8, 0, 0, 16, color='k', label='Z-axis')
+        ax.quiver(-8, 0, 0, 16, 0, 0, color='k', label='_X-axis')
+        ax.quiver(0, -8, 0, 0, 16, 0, color='k', label='_Y-axis')
+        ax.quiver(0, 0, -8, 0, 0, 16, color='k', label='_Z-axis')
         
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
@@ -82,29 +89,26 @@ if __name__ == "__main__":
                                 [0, 1, 0, -center_y],
                                 [0, 0, 1, -center_z],
                                 [0, 0, 0, 1]])
-    
     matrix_move_from_center = np.array([[1, 0, 0, center_x],
                                 [0, 1, 0, center_y],
                                 [0, 0, 1, center_z],
                                 [0, 0, 0, 1]])
-    
     matrix_increment = np.array([[1.5, 0, 0, 0],
                                 [0, 1.5, 0, 0],
                                 [0, 0, 1.5, 0],
                                 [0, 0, 0, 1]])
-    
-    matrix_decrease = np.array([[0.5,   0,   0, 0],
-                                [  0, 0.5,   0, 0],
-                                [  0,   0, 0.5, 0],
-                                [  0,   0,   0, 1]])
-    matrix_sym_start_coord = np.array([[  -1,  0,  0, 0],
-                                        [  0, -1,  0, 0],
-                                        [  0,  0, -1, 0],
-                                        [  0,  0,  0, 1]])
-    matrix_sym_one_coord_plane = np.array([[  1,  0,  0, 0],
-                                        [  0, -1,  0, 0],
-                                        [  0,  0, 1, 0],
-                                        [  0,  0,  0, 1]])
+    matrix_decrease = np.array([[0.5, 0, 0, 0],
+                                [0, 0.5, 0, 0],
+                                [0, 0, 0.5, 0],
+                                [0, 0, 0, 1]])
+    matrix_sym_start_coord = np.array([[-1, 0, 0, 0],
+                                        [0, -1, 0, 0],
+                                        [0, 0, -1, 0],
+                                        [0, 0, 0, 1]])
+    matrix_sym_one_coord_plane = np.array([[1, 0, 0, 0],
+                                        [0, -1, 0, 0],
+                                        [0, 0, 1, 0],
+                                        [0, 0, 0, 1]])
     # Куб переміщений до центру
     cube_to_center = np.dot(cube_vertices_with_ones, matrix_move_to_center.T)
     # Куб збільшений в центрі
@@ -128,14 +132,14 @@ if __name__ == "__main__":
     cube_sym_2 = Cube(cube_sym_one_coord_plane)
 
     # Виводимо куби на одному графіку
-    fig = plt.figure()
+    fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111, projection='3d')
-    cube_original.plot(ax, color='green')
-    cube_scaled_up.plot(ax, 'red')
-    cube_scaled_down.plot(ax, 'yellow')
-    cube_sym_1.plot(ax, 'purple')
-    cube_sym_2.plot(ax, 'orange')
-
+    cube_original.plot(ax, label= 'Original', color='green')
+    cube_scaled_up.plot(ax, label= 'Bigger', color = 'red')
+    cube_scaled_down.plot(ax, label = 'Smaller', color = 'yellow')
+    cube_sym_1.plot(ax, label = 'Sym to start coord', color='purple')
+    cube_sym_2.plot(ax, label = 'Sym to coord plane', color='orange')
+    plt.legend()
     plt.show()
 
 
