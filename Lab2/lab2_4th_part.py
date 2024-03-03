@@ -8,7 +8,7 @@ point1 = np.array([1, 2, 3])
 point2 = np.array([4, 3, 5])
 point3 = np.array([1, 5, 3])
 
-#Coordinates of points
+# Coordinates of points
 x1,y1,z1 = point1[0],point1[1],point1[2]
 x2,y2,z2 = point2[0],point2[1],point2[2]
 x3,y3,z3 = point3[0],point3[1],point3[2]

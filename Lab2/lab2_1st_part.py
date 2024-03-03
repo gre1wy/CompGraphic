@@ -33,12 +33,9 @@ class Cube:
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
 
-        # Задаємо діапазон значень та позначки на вісях
         ax.set_xlim([-8, 8])
         ax.set_ylim([-8, 8])
         ax.set_zlim([-8, 8])
-
-        ax.legend(loc='upper right')
 
 class Line:
     def __init__(self, points):
