@@ -24,10 +24,9 @@ class Cube:
         ax.quiver(0, 0, -8, 0, 0, 16, color='k', label='_Z-axis')
 
         # Відображення
-        poly3d = Poly3DCollection(edges, facecolors='cyan', linewidths=1, edgecolors=color, alpha=1)
+        poly3d = Poly3DCollection(edges, facecolors='cyan', linewidths=1, edgecolors=color, alpha=0)
         ax.add_collection3d(poly3d)
 
-        # Для відображення в легенді
         ax.add_collection3d(Line3DCollection([], colors=color, linewidths=1, label=label))
 
         ax.set_xlabel('X')

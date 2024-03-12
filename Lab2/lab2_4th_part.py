@@ -51,6 +51,7 @@ def angle_between_planes(norm_vector):
     theta_rad = np.arccos(cos_theta)
     
     return theta_rad
+
 angle = angle_between_planes(normal_vector)
 
 # Cube
