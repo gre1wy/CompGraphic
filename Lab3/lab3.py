@@ -3,10 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def test():
-    axiom = "F"
-    rule = "F+F--F+F"
-    max_iter = 10
+def moves():
+    axiom = "F-F-F-F"
+    rule = "F+FF-FF-F-F+F+FF-F-F+F+FF+FF-F"
+    max_iter = 5
     for _ in range(max_iter-1):
         newaxiom = ""
         for el in axiom:
@@ -20,7 +20,7 @@ def test():
 
 def vis_axiom(str):
     fi = 0
-    dfi = np.pi/3
+    dfi = np.pi/2
     N=len(str)
     x = np.zeros(N+1)
     y = np.zeros(N+1)
@@ -35,16 +35,14 @@ def vis_axiom(str):
             fi+=dfi
         elif str[i]=="-":
             fi-=dfi
-    print(x)
-    print(y)
     return x, y
 
 
 if __name__ == "__main__":
-    axiom_result = test()
-    x,y = vis_axiom(axiom_result)
+    result_axiom = moves()
+    x, y = vis_axiom(result_axiom)
     fig, ax = plt.subplots()
-    ax.plot(x, y, linewidth=2.0)
+    ax.plot(x, y, linewidth=0.4)
     plt.show()
 
 
