@@ -1,48 +1,66 @@
-import turtle 
+from matplotlib.animation import FuncAnimation, PillowWriter
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-def moves():
-    axiom = "F-F-F-F"
-    rule = "F+FF-FF-F-F+F+FF-F-F+F+FF+FF-F"
-    max_iter = 5
-    for _ in range(max_iter-1):
+def moves(axiom, rules: dict, max_iter):
+    for _ in range(max_iter):
         newaxiom = ""
         for el in axiom:
-            if el == "F":
-                newaxiom += rule
+            if el in rules.keys():
+                newaxiom += str(rules[el])
             else:
                 newaxiom += el
         axiom = newaxiom
-
     return axiom
 
-def vis_axiom(str):
-    fi = 0
-    dfi = np.pi/2
-    N=len(str)
-    x = np.zeros(N+1)
-    y = np.zeros(N+1)
+def data_fractal(axiom, rules, max_iter, fi, dfi):
+    if type(dfi) != float:
+        dfi = np.radians(dfi)
+    fractal = moves(axiom, rules, max_iter)
+    N = len(fractal)
+    x = np.zeros(N + 1)
+    y = np.zeros(N + 1)
     L = 2
     for i in range(N):
-        x[i+1]=x[i]
-        y[i+1]=y[i]
-        if str[i]=="F":
-            x[i+1] += L*np.cos(fi)
-            y[i+1] += L*np.sin(fi)
-        elif str[i]=="+":
-            fi+=dfi
-        elif str[i]=="-":
-            fi-=dfi
+        x[i + 1] = x[i]
+        y[i + 1] = y[i]
+        if fractal[i] == "F":
+            x[i + 1] += L * np.cos(fi)
+            y[i + 1] += L * np.sin(fi)
+        elif fractal[i] == "+":
+            fi += dfi
+        elif fractal[i] == "-":
+            fi -= dfi
     return x, y
 
+axiom8 = "FX"
+rules8 = {"F": "-F++F-"}
+max_iter8 = 15
+fi8 = 0
+dfi8 = np.pi / 2
 
-if __name__ == "__main__":
-    result_axiom = moves()
-    x, y = vis_axiom(result_axiom)
-    fig, ax = plt.subplots()
-    ax.plot(x, y, linewidth=0.4)
-    plt.show()
+# Function to update the plot
+def update(frame):
+    ax.clear()
+    ax.plot(x_data[frame], y_data[frame], linewidth=0.4)
+    ax.set_title(f'dfi = {dfi_values[frame]}')
+    ax.set_aspect('equal', adjustable='box')
+    ax.grid(True)
 
+# Генерация данных для каждого dfi
+dfi_values = np.arange(0, 120)
+x_data = []
+y_data = []
+for dfi_data in dfi_values:
+    x, y = data_fractal(axiom8, rules8, max_iter8, fi8, dfi_data)
+    x_data.append(x)
+    y_data.append(y)
+
+# Создание анимации
+fig, ax = plt.subplots(figsize=(10, 8))
+anim = FuncAnimation(fig, update, frames=len(dfi_values), interval=200)
+
+# Создание объекта PillowWriter и сохранение GIF
+writer = PillowWriter(fps=10) 
+anim.save('CompGraphic/Lab3/fractal_animation2.gif', writer=writer)
 
