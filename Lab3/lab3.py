@@ -33,21 +33,22 @@ def data_fractal(axiom, rules, max_iter, fi, dfi):
             fi -= dfi
     return x, y
 
+# Дані фрактала
 axiom8 = "FX"
 rules8 = {"F": "-F++F-"}
 max_iter8 = 15
 fi8 = 0
 dfi8 = np.pi / 2
 
-# Function to update the plot
+# Функція апдейту фрактала
 def update(frame):
     ax.clear()
     ax.plot(x_data[frame], y_data[frame], linewidth=0.4)
     ax.set_title(f'dfi = {dfi_values[frame]}')
-    ax.set_aspect('equal', adjustable='box')
+    #ax.set_aspect('equal', adjustable='box')
     ax.grid(True)
 
-# Генерация данных для каждого dfi
+# Генерація данних для кожного dfi
 dfi_values = np.arange(0, 120)
 x_data = []
 y_data = []
@@ -56,11 +57,11 @@ for dfi_data in dfi_values:
     x_data.append(x)
     y_data.append(y)
 
-# Создание анимации
+# Створення анімації
 fig, ax = plt.subplots(figsize=(10, 8))
 anim = FuncAnimation(fig, update, frames=len(dfi_values), interval=200)
 
-# Создание объекта PillowWriter и сохранение GIF
+# Створення гіфки
 writer = PillowWriter(fps=10) 
-anim.save('CompGraphic/Lab3/fractal_animation2.gif', writer=writer)
+anim.save('CompGraphic/Lab3/fractal_animation4.gif', writer=writer)
 
