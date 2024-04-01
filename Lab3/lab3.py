@@ -49,7 +49,7 @@ def update(frame):
     ax.grid(True)
 
 # Генерація данних для кожного dfi
-dfi_values = np.arange(0, 120)
+dfi_values = np.arange(-180, 180)
 x_data = []
 y_data = []
 for dfi_data in dfi_values:
