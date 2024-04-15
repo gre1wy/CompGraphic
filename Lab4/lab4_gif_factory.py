@@ -4,24 +4,44 @@ import imageio
 
 def generate_fractal(rules: dict, iterations: int):
     x, y = [0], [0]
-    if 'p' in rules[0]:
-        for _ in range(iterations):
-            rule = np.random.choice(rules, p=[rule['p'] for rule in rules])
-            x1 = rule['a'] * x[-1] + rule['b'] * y[-1] + rule['e']
-            y1 = rule['c'] * x[-1] + rule['d'] * y[-1] + rule['f']
-            x.append(x1)
-            y.append(y1)
+    if 'a' in rules[0]:
+        if 'p' in rules[0]:
+            for _ in range(iterations):
+                rule = np.random.choice(rules, p=[rule['p'] for rule in rules])
+                x1 = rule['a'] * x[-1] + rule['b'] * y[-1] + rule['e']
+                y1 = rule['c'] * x[-1] + rule['d'] * y[-1] + rule['f']
+                x.append(x1)
+                y.append(y1)
+        else:
+            for _ in range(iterations):
+                rule = np.random.choice(rules)
+                x1 = rule['a'] * x[-1] + rule['b'] * y[-1] + rule['e']
+                y1 = rule['c'] * x[-1] + rule['d'] * y[-1] + rule['f']
+                x.append(x1)
+                y.append(y1)
     else:
-        for _ in range(iterations):
-            rule = np.random.choice(rules)
-            x1 = rule['a'] * x[-1] + rule['b'] * y[-1] + rule['e']
-            y1 = rule['c'] * x[-1] + rule['d'] * y[-1] + rule['f']
-            x.append(x1)
-            y.append(y1)
+        if 'p' in rules[0]:
+            for _ in range(iterations):
+                rule = np.random.choice(rules, p=[rule['p'] for rule in rules])
+                x1 = rule['r'] *np.cos(rule['theta'])* x[-1] - rule['s']*np.sin(rule['phi'])*y[-1] + rule['e']
+                y1 = -rule['r']*np.sin(rule['theta']) * x[-1] + rule['s']*np.cos(rule['phi'])* y[-1] + rule['f']
+                x.append(x1)
+                y.append(y1)
+        else:
+            for _ in range(iterations):
+                rule = np.random.choice(rules)
+                x1 = rule['r'] *np.cos(rule['theta'])* x[-1] - rule['s']*np.sin(rule['phi'])*y[-1] + rule['e']
+                y1 = -rule['r']*np.sin(rule['theta']) * x[-1] + rule['s']*np.cos(rule['phi'])* y[-1] + rule['f']
+                x.append(x1)
+                y.append(y1)
+
     return x, y
 
 def display_fractal(rules: dict, iterations: int, delay: float, pixels: int, filename='fractal.gif'):
-    x, y = generate_fractal(rules, iterations)
+    if 'a' in rules[0]:
+        x, y = generate_fractal(rules, iterations)
+    else:
+        x, y = generate_fractal_trig(rules, iterations)
     frames = []
     plt.figure()
     annotation = None 
@@ -169,6 +189,7 @@ rules = [
     {'a': 0.5, 'b': 0.0, 'c': 0.0, 'd': 0.5, 'e': 0.25, 'f': 0.5, 'p': 1/3}
 ]
 rules_list.append(rules)
+
 i = 1
 for rules in rules_list:
     display_fractal(rules, iterations=100000, delay=0.0001, pixels=1000, filename=f'CompGraphic/Lab4/gifs/fractal_animation_{i}.gif')
