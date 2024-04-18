@@ -38,10 +38,7 @@ def generate_fractal(rules: dict, iterations: int):
     return x, y
 
 def display_fractal(rules: dict, iterations: int, delay: float, pixels: int, filename='fractal.gif'):
-    if 'a' in rules[0]:
-        x, y = generate_fractal(rules, iterations)
-    else:
-        x, y = generate_fractal_trig(rules, iterations)
+    x, y = generate_fractal(rules, iterations)
     frames = []
     plt.figure()
     annotation = None 
@@ -93,7 +90,14 @@ rules = [
 ]
 rules_list.append(rules)
 # Другий варіант фрактального дерева
-# --
+rules = [
+    {'r': 0.0500, 's': 0.6000, 'theta': 0.0000, 'phi': 0.0000, 'e': 0.0000, 'f': 0.0000},
+    {'r': 0.0500, 's': -0.5000, 'theta': 0.0000, 'phi': 0.0000, 'e': 0.0000, 'f': 1.0000},
+    {'r': 0.6000, 's': 0.5000, 'theta': 0.6980, 'phi': 0.6980, 'e': 0.0000, 'f': 0.6000},
+    {'r': 0.5000, 's': 0.4500, 'theta': 0.3490, 'phi': 0.3492, 'e': 0.0000, 'f': 1.1000},
+    {'r': 0.5000, 's': 0.5500, 'theta': -0.5240, 'phi': -0.5240, 'e': 0.0000, 'f': 1.0000},
+    {'r': 0.5500, 's': 0.4000, 'theta': -0.6980, 'phi': -0.6980, 'e': 0.0000, 'f': 0.7000}
+]
 # Третій варіант фрактального дерева
 rules = [
     {'a': 0.0100, 'b': 0.0000, 'c': 0.0000, 'd': 0.4500, 'e': 0.0000, 'f': 0.0000},

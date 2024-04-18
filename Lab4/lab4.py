@@ -38,7 +38,7 @@ def generate_fractal(rules: dict, iterations: int):
 
 
 
-def display_fractal(rules: dict, iterations: int, delay: float, pixels: int):
+def display_fractal(rules: dict, iterations: int, delay: float, pixels: int, name='fractal'):
     x, y = generate_fractal(rules, iterations)
     plt.figure()  
     plt.ion() 
@@ -48,7 +48,7 @@ def display_fractal(rules: dict, iterations: int, delay: float, pixels: int):
             if annotation is not None:
                 annotation.remove()
             plt.plot(x[i:i+pixels], y[i:i+pixels], '*', color='green', markersize=0.5)
-            plt.title('Fractal')
+            plt.title(name)
             annotation = plt.annotate(f'Pixels drawn: {i}', xy=(0, 0), fontsize=10, color='red')
             plt.draw()
             plt.pause(delay)
@@ -86,18 +86,7 @@ rules = [
     {'a': 0.05,'b': 0.12,'c': 0.34,'d': 0.612,'e': 0,'f': 2,'p': 0.16},
     {'a': 0.31,'b': 0.6,'c': -0.38,'d': 0.21,'e': 0,'f': 0.2,'p': 0.16}
 ]
-
-rules = [ 
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)},
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)},
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)},
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)},
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)},
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)},
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)},
-    {'r': np.random.uniform(-1, 1), 's': np.random.uniform(-1, 1), 'theta': np.random.uniform(-1, 1), 'phi': np.random.uniform(-1, 1), 'e': np.random.uniform(-1, 1), 'f': np.random.uniform(-1, 1)}
-]
-
-display_fractal(rules, iterations=100000, delay=0.01, pixels=100000)
+if __name__ == "__main__":
+    display_fractal(rules, iterations=100000, delay=0.01, pixels=100000, name="hello")
 
 
